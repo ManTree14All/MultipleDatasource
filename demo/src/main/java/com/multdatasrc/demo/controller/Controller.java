@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.multdatasrc.demo.model.book.Book;
 import com.multdatasrc.demo.model.book.repo.BookRepo;
+import com.multdatasrc.demo.model.orders.Orders;
+import com.multdatasrc.demo.model.orders.repo.OrderRepo;
 import com.multdatasrc.demo.model.user.User;
 import com.multdatasrc.demo.model.user.repo.UserRepo;
 
@@ -27,11 +29,16 @@ class MainController{
 	@Autowired
 	private BookRepo bookRepo;
 	
+	@Autowired
+	private OrderRepo orderRepo;
+	
 	@PostConstruct
 	public void addDBData(){
 	userRepo.saveAll(Stream.of(new User(1,"Manish"),new User(2,"Deepak"),new User(3,"Purnima"))
 				.collect(Collectors.toList()));
 	bookRepo.saveAll(Stream.of(new Book(1,"Java"),new Book(2,"Spring Boot"),new Book(3,"Microservices"))
+			.collect(Collectors.toList()));
+	orderRepo.saveAll(Stream.of(new Orders(123,"Manish","Spring Boot"),new Orders(124,"Manish","Microservices"),new Orders(234,"Deepak","Java"),new Orders(345,"Purnima","Java"))
 			.collect(Collectors.toList()));
 	}
 	
@@ -41,9 +48,13 @@ class MainController{
 	}
 
 	@GetMapping("/books")
-	public List<com.multdatasrc.demo.model.book.Book> getAllBooks(){
+	public List<Book> getAllBooks(){
 		return bookRepo.findAll();
 	}
 	
+	@GetMapping("/orders")
+	public List<Orders> getAllOrders(){
+		return orderRepo.findAll();
+	}
 
 }
